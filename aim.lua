@@ -28,51 +28,38 @@ function Aim.Init(Config, Utils, UI, UIObjects)
     StatusLabel.LayoutOrder = Utils.nextOrder()
     StatusLabel.Parent = UIObjects.ScrollFrame
     
-    -- Функция обновления UI
-    local function updateUI()
-        if not StatusLabel or not StatusLabel.Parent then return end
+    local ToggleButton = UI.createButton(UIObjects.ScrollFrame, Utils, "ВЫКЛ", 25, Color3.fromRGB(0, 150, 80), function()
+        scriptEnabled = not scriptEnabled
         if scriptEnabled then
             StatusLabel.Text = "Статус: ВКЛ"
             StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+            ToggleButton.Text = "ВЫКЛ"
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
         else
             StatusLabel.Text = "Статус: ВЫКЛ"
             StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-        end
-    end
-    
-    local ToggleButton = UI.createButton(UIObjects.ScrollFrame, Utils, "ВЫКЛ", 25, Color3.fromRGB(0, 150, 80), function()
-        scriptEnabled = not scriptEnabled
-        updateUI()
-        if ToggleButton then
-            if scriptEnabled then
-                ToggleButton.Text = "ВЫКЛ"
-                ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
-            else
-                ToggleButton.Text = "ВКЛ"
-                ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
-            end
+            ToggleButton.Text = "ВКЛ"
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
         end
     end)
     
-    -- Активация
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if gameProcessed then return end
         
         if input.KeyCode == Config.SETTINGS.ACTIVATE_KEY then
-    scriptEnabled = not scriptEnabled
-    updateUI()
-    pcall(function()
-        if ToggleButton then
+            scriptEnabled = not scriptEnabled
             if scriptEnabled then
+                StatusLabel.Text = "Статус: ВКЛ"
+                StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
                 ToggleButton.Text = "ВЫКЛ"
                 ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
             else
+                StatusLabel.Text = "Статус: ВЫКЛ"
+                StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
                 ToggleButton.Text = "ВКЛ"
                 ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
             end
         end
-    end)
-end
         
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             isShooting = true
@@ -85,7 +72,6 @@ end
         end
     end)
     
-    -- Логика
     local function getClosestZombie()
         local closest = nil
         local closestDist = math.huge
