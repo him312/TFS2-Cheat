@@ -20,6 +20,9 @@ end
 -- Создаём UI
 local UIObjects = UI.createWindow(Config, Utils)
 
+print("UIObjects:", UIObjects)
+print("ScrollFrame:", UIObjects and UIObjects.ScrollFrame)
+
 -- Инициализация модулей
 Aim.Init(Config, Utils, UI, UIObjects)
 BigHead.Init(Config, Utils, UI, UIObjects)
