@@ -2,10 +2,14 @@
 local UI = {}
 
 local CoreGui = game:GetService("CoreGui")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
 
--- Создание главного окна
+-- Внутренний счётчик
+local layoutCounter = 0
+local function nextOrder()
+    layoutCounter = layoutCounter + 1
+    return layoutCounter
+end
+
 function UI.createWindow(Config, Utils)
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "TFS2CheatMenu"
@@ -95,7 +99,6 @@ function UI.createWindow(Config, Utils)
     }
 end
 
--- Создание заголовка
 function UI.createHeader(ScrollFrame, Utils, text)
     local label = Instance.new("TextLabel")
     label.Size = UDim2.new(1, -10, 0, 18)
@@ -104,12 +107,11 @@ function UI.createHeader(ScrollFrame, Utils, text)
     label.TextColor3 = Color3.fromRGB(150, 150, 200)
     label.TextSize = 11
     label.Font = Enum.Font.GothamBold
-    label.LayoutOrder = Utils.nextOrder()
+    label.LayoutOrder = nextOrder()
     label.Parent = ScrollFrame
     return label
 end
 
--- Создание кнопки
 function UI.createButton(ScrollFrame, Utils, text, height, color, callback)
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(1, -10, 0, height or 25)
@@ -119,7 +121,7 @@ function UI.createButton(ScrollFrame, Utils, text, height, color, callback)
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.TextSize = 12
     button.Font = Enum.Font.Gotham
-    button.LayoutOrder = Utils.nextOrder()
+    button.LayoutOrder = nextOrder()
     button.Parent = ScrollFrame
     button.MouseButton1Click:Connect(callback)
     return button
