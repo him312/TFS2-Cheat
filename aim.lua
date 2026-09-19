@@ -59,18 +59,20 @@ function Aim.Init(Config, Utils, UI, UIObjects)
         if gameProcessed then return end
         
         if input.KeyCode == Config.SETTINGS.ACTIVATE_KEY then
-            scriptEnabled = not scriptEnabled
-            updateUI()
-            if ToggleButton then
-                if scriptEnabled then
-                    ToggleButton.Text = "ВЫКЛ"
-                    ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
-                else
-                    ToggleButton.Text = "ВКЛ"
-                    ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
-                end
+    scriptEnabled = not scriptEnabled
+    updateUI()
+    pcall(function()
+        if ToggleButton then
+            if scriptEnabled then
+                ToggleButton.Text = "ВЫКЛ"
+                ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
+            else
+                ToggleButton.Text = "ВКЛ"
+                ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
             end
         end
+    end)
+end
         
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             isShooting = true
