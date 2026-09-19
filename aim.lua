@@ -15,7 +15,6 @@ local scriptEnabled = true
 function Aim.Init(Config, Utils, UI, UIObjects)
     local Zombies = Utils.getZombies()
     
-    -- Создаём UI
     UI.createHeader(UIObjects.ScrollFrame, Utils, "Aim Assist")
     
     local StatusLabel = Instance.new("TextLabel")
@@ -29,18 +28,29 @@ function Aim.Init(Config, Utils, UI, UIObjects)
     StatusLabel.LayoutOrder = Utils.nextOrder()
     StatusLabel.Parent = UIObjects.ScrollFrame
     
-    local ToggleButton = UI.createButton(UIObjects.ScrollFrame, Utils, "ВЫКЛ", 25, Color3.fromRGB(0, 150, 80), function()
-        scriptEnabled = not scriptEnabled
+    -- Функция обновления UI
+    local function updateUI()
+        if not StatusLabel or not StatusLabel.Parent then return end
         if scriptEnabled then
             StatusLabel.Text = "Статус: ВКЛ"
             StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-            ToggleButton.Text = "ВЫКЛ"
-            ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
         else
             StatusLabel.Text = "Статус: ВЫКЛ"
             StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-            ToggleButton.Text = "ВКЛ"
-            ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+        end
+    end
+    
+    local ToggleButton = UI.createButton(UIObjects.ScrollFrame, Utils, "ВЫКЛ", 25, Color3.fromRGB(0, 150, 80), function()
+        scriptEnabled = not scriptEnabled
+        updateUI()
+        if ToggleButton then
+            if scriptEnabled then
+                ToggleButton.Text = "ВЫКЛ"
+                ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
+            else
+                ToggleButton.Text = "ВКЛ"
+                ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+            end
         end
     end)
     
@@ -50,16 +60,15 @@ function Aim.Init(Config, Utils, UI, UIObjects)
         
         if input.KeyCode == Config.SETTINGS.ACTIVATE_KEY then
             scriptEnabled = not scriptEnabled
-            if scriptEnabled then
-                StatusLabel.Text = "Статус: ВКЛ"
-                StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-                ToggleButton.Text = "ВЫКЛ"
-                ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
-            else
-                StatusLabel.Text = "Статус: ВЫКЛ"
-                StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-                ToggleButton.Text = "ВКЛ"
-                ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+            updateUI()
+            if ToggleButton then
+                if scriptEnabled then
+                    ToggleButton.Text = "ВЫКЛ"
+                    ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
+                else
+                    ToggleButton.Text = "ВКЛ"
+                    ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+                end
             end
         end
         
