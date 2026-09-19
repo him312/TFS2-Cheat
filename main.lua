@@ -1,5 +1,5 @@
 -- main.lua
-local baseUrl = "https://raw.githubusercontent.com/ТВОЙ_НИК/TFS2-Cheat/main/"
+local baseUrl = "https://raw.githubusercontent.com/him312/TFS2-Cheat/main/"
 
 print("[TFS2 Cheat] Загрузка модулей...")
 
