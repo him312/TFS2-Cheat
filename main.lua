@@ -4,11 +4,22 @@ local baseUrl = "https://raw.githubusercontent.com/him312/TFS2-Cheat/main/"
 print("[TFS2 Cheat] Загрузка модулей...")
 
 local Config = loadstring(game:HttpGet(baseUrl .. "config.lua"))()
+print("[Main] Config:", Config)
+
 local Utils = loadstring(game:HttpGet(baseUrl .. "utils.lua"))()
+print("[Main] Utils:", Utils)
+
 local UI = loadstring(game:HttpGet(baseUrl .. "ui.lua"))()
+print("[Main] UI:", UI)
+
 local Aim = loadstring(game:HttpGet(baseUrl .. "aim.lua"))()
+print("[Main] Aim:", Aim)
+
 local BigHead = loadstring(game:HttpGet(baseUrl .. "bighead.lua"))()
+print("[Main] BigHead:", BigHead)
+
 local Highlight = loadstring(game:HttpGet(baseUrl .. "highlight.lua"))()
+print("[Main] Highlight:", Highlight)
 
 -- Ждём Zombies
 local Zombies = Utils.getZombies()
