@@ -1,4 +1,10 @@
 -- main.lua — ТЕСТ + BigHead с pcall
+local CoreGui = game:GetService("CoreGui")
+for _, gui in ipairs(CoreGui:GetChildren()) do
+    if gui.Name == "TFS2CheatMenu" then
+        gui:Destroy()
+    end
+end
 local baseUrl = "https://raw.githubusercontent.com/him312/TFS2-Cheat/main/"
 
 local Config = loadstring(game:HttpGet(baseUrl .. "config.lua"))()
