@@ -40,3 +40,10 @@ local ok3, err3 = pcall(function() Highlight.Init(Config, Utils, UI, UIObjects) 
 print("[Test] Highlight:", ok3, err3)
 
 print("[TFS2 Cheat] Загружено. Старых окон удалено:", removed)
+task.wait(0.5)
+print("=== Порядок в ScrollFrame ===")
+for _, child in ipairs(UIObjects.ScrollFrame:GetChildren()) do
+    if child:IsA("GuiObject") then
+        print(child.ClassName .. " | " .. child.Name .. " | LayoutOrder: " .. tostring(child.LayoutOrder))
+    end
+end
