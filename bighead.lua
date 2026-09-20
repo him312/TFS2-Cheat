@@ -4,20 +4,10 @@ local BigHead = {}
 function BigHead.Init(Config, Utils, UI, UIObjects)
     local Zombies = Utils.getZombies()
     
+    -- 1. Header
     UI.createHeader(UIObjects.ScrollFrame, Utils, "Big Head")
     
-    -- Кнопка вкл/выкл
-    UI.createButton(UIObjects.ScrollFrame, Utils, "Big Head: ВКЛ/ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
-        Config.SETTINGS.BIGHEAD_ENABLED = not Config.SETTINGS.BIGHEAD_ENABLED
-        if Config.SETTINGS.BIGHEAD_ENABLED then
-            BigHead.updateAll(Zombies, Config)
-        else
-            BigHead.resetAll(Zombies)
-        end
-        print("[BigHead] Статус:", Config.SETTINGS.BIGHEAD_ENABLED and "ВКЛ" or "ВЫКЛ")
-    end)
-    
-    -- Статус
+    -- 2. StatusLabel (ПЕРЕД кнопкой!)
     local StatusLabel = Instance.new("TextLabel")
     StatusLabel.Size = UDim2.new(1, -10, 0, 22)
     StatusLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
@@ -29,7 +19,18 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     StatusLabel.LayoutOrder = Utils.nextOrder()
     StatusLabel.Parent = UIObjects.ScrollFrame
     
-    -- === РАЗМЕР ГОЛОВЫ ===
+    -- 3. Кнопка вкл/выкл
+    UI.createButton(UIObjects.ScrollFrame, Utils, "Big Head: ВКЛ/ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
+        Config.SETTINGS.BIGHEAD_ENABLED = not Config.SETTINGS.BIGHEAD_ENABLED
+        if Config.SETTINGS.BIGHEAD_ENABLED then
+            BigHead.updateAll(Zombies, Config)
+        else
+            BigHead.resetAll(Zombies)
+        end
+        print("[BigHead] Статус:", Config.SETTINGS.BIGHEAD_ENABLED and "ВКЛ" or "ВЫКЛ")
+    end)
+    
+    -- 4. Размер
     local SizeLabel = Instance.new("TextLabel")
     SizeLabel.Size = UDim2.new(1, -10, 0, 18)
     SizeLabel.BackgroundTransparency = 1
@@ -79,7 +80,7 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     SizePlus.Font = Enum.Font.GothamBold
     SizePlus.Parent = SizeContainer
     
-    -- === ПРОЗРАЧНОСТЬ (ПОД РАЗМЕРОМ) ===
+    -- 5. Прозрачность
     local TransLabel = Instance.new("TextLabel")
     TransLabel.Size = UDim2.new(1, -10, 0, 18)
     TransLabel.BackgroundTransparency = 1
