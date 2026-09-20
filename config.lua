@@ -19,18 +19,18 @@ Config.SETTINGS = {
     MAX_DISTANCE = 600,
     SMOOTHNESS = 0.5,
     Y_OFFSET = 58,
-    ACTIVATE_KEY = Enum.KeyCode.RightAlt,
+    ACTIVATE_KEY = Enum.KeyCode.LeftAlt,  -- ← LeftAlt вместо RightAlt
     
     -- Big Head
     BIGHEAD_ENABLED = false,
-    HEAD_SCALE = 4.5,
+    HEAD_SCALE = 6,  -- ← 6 вместо 4.5
     TRANSPARENCY = 0.8,
     
     -- Highlight
     HIGHLIGHT_ENABLED = false,
     HIGHLIGHT_TRANSPARENCY = 0.5,
     
-    -- Типы (индивидуальные)
+    -- Типы
     TYPE_SETTINGS = {},
 }
 
