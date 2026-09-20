@@ -1,9 +1,8 @@
 -- main.lua — ТЕСТ + BigHead с pcall
 local CoreGui = game:GetService("CoreGui")
+print("[Cleanup] Детей в CoreGui:", #CoreGui:GetChildren())
 for _, gui in ipairs(CoreGui:GetChildren()) do
-    if gui.Name == "TFS2CheatMenu" then
-        gui:Destroy()
-    end
+    print("  " .. gui.ClassName .. " | " .. gui.Name)
 end
 local baseUrl = "https://raw.githubusercontent.com/him312/TFS2-Cheat/main/"
 
