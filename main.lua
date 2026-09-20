@@ -1,20 +1,14 @@
--- main.lua — ТЕСТ
+-- main.lua — ТЕСТ + BigHead
 local baseUrl = "https://raw.githubusercontent.com/him312/TFS2-Cheat/main/"
 
-print("[Test] Загрузка Config...")
 local Config = loadstring(game:HttpGet(baseUrl .. "config.lua"))()
-
-print("[Test] Загрузка Utils...")
 local Utils = loadstring(game:HttpGet(baseUrl .. "utils.lua"))()
-
-print("[Test] Загрузка UI...")
 local UI = loadstring(game:HttpGet(baseUrl .. "ui.lua"))()
+local BigHead = loadstring(game:HttpGet(baseUrl .. "bighead.lua"))()
 
-print("[Test] Ждём Zombies...")
 local Zombies = Utils.getZombies()
-
-print("[Test] Создаём UI...")
 local UIObjects = UI.createWindow(Config, Utils)
 
-print("[Test] UI создан! ScrollFrame:", UIObjects and UIObjects.ScrollFrame)
-print("[Test] Готово. Ошибок быть не должно.")
+print("[Test] BigHead Init...")
+BigHead.Init(Config, Utils, UI, UIObjects)
+print("[Test] BigHead готов. Ошибок нет.")
