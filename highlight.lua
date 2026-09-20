@@ -60,23 +60,45 @@ function Highlight.Init(Config, Utils, UI, UIObjects)
     
     UI.createHeader(UIObjects.ScrollFrame, Utils, "Highlight")
     
-    local HighlightToggle = UI.createButton(UIObjects.ScrollFrame, Utils, "Highlight: ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
+    -- StatusLabel
+    local StatusLabel = Instance.new("TextLabel")
+    StatusLabel.Size = UDim2.new(1, -10, 0, 22)
+    StatusLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+    StatusLabel.BorderSizePixel = 0
+    StatusLabel.Text = "Статус: ВЫКЛ"
+    StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+    StatusLabel.TextSize = 12
+    StatusLabel.Font = Enum.Font.Gotham
+    StatusLabel.LayoutOrder = Utils.nextOrder()
+    StatusLabel.Parent = UIObjects.ScrollFrame
+    
+    -- Кнопка БЕЗ UI в callback'е
+    UI.createButton(UIObjects.ScrollFrame, Utils, "Highlight: ВКЛ/ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
         Config.SETTINGS.HIGHLIGHT_ENABLED = not Config.SETTINGS.HIGHLIGHT_ENABLED
-        if Config.SETTINGS.HIGHLIGHT_ENABLED then
-            HighlightToggle.Text = "Highlight: ВКЛ"
-            HighlightToggle.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
-        else
-            HighlightToggle.Text = "Highlight: ВЫКЛ"
-            HighlightToggle.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
-        end
         updateAll()
+        print("[Highlight] Статус:", Config.SETTINGS.HIGHLIGHT_ENABLED and "ВКЛ" or "ВЫКЛ")
+    end)
+    
+    -- Обновление StatusLabel
+    task.spawn(function()
+        while task.wait(0.1) do
+            if StatusLabel and StatusLabel.Parent then
+                if Config.SETTINGS.HIGHLIGHT_ENABLED then
+                    StatusLabel.Text = "Статус: ВКЛ"
+                    StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+                else
+                    StatusLabel.Text = "Статус: ВЫКЛ"
+                    StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+                end
+            end
+        end
     end)
     
     -- Прозрачность
     local HTransLabel = Instance.new("TextLabel")
     HTransLabel.Size = UDim2.new(1, -10, 0, 18)
     HTransLabel.BackgroundTransparency = 1
-    HTransLabel.Text = "Прозрачность подсветки: 0.5"
+    HTransLabel.Text = "Прозрачность: 0.5"
     HTransLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
     HTransLabel.TextSize = 11
     HTransLabel.Font = Enum.Font.Gotham
@@ -124,16 +146,22 @@ function Highlight.Init(Config, Utils, UI, UIObjects)
     
     HTransMinus.MouseButton1Click:Connect(function()
         Config.SETTINGS.HIGHLIGHT_TRANSPARENCY = math.max(0, Config.SETTINGS.HIGHLIGHT_TRANSPARENCY - 0.1)
-        HTransValue.Text = string.format("%.1f", Config.SETTINGS.HIGHLIGHT_TRANSPARENCY)
-        HTransLabel.Text = "Прозрачность подсветки: " .. string.format("%.1f", Config.SETTINGS.HIGHLIGHT_TRANSPARENCY)
         updateAll()
     end)
     
     HTransPlus.MouseButton1Click:Connect(function()
         Config.SETTINGS.HIGHLIGHT_TRANSPARENCY = math.min(1, Config.SETTINGS.HIGHLIGHT_TRANSPARENCY + 0.1)
-        HTransValue.Text = string.format("%.1f", Config.SETTINGS.HIGHLIGHT_TRANSPARENCY)
-        HTransLabel.Text = "Прозрачность подсветки: " .. string.format("%.1f", Config.SETTINGS.HIGHLIGHT_TRANSPARENCY)
         updateAll()
+    end)
+    
+    -- Обновление слайдера прозрачности
+    task.spawn(function()
+        while task.wait(0.1) do
+            if HTransValue and HTransValue.Parent then
+                HTransValue.Text = string.format("%.1f", Config.SETTINGS.HIGHLIGHT_TRANSPARENCY)
+                HTransLabel.Text = "Прозрачность: " .. string.format("%.1f", Config.SETTINGS.HIGHLIGHT_TRANSPARENCY)
+            end
+        end
     end)
     
     -- Типы с RGB
