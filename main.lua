@@ -1,7 +1,7 @@
--- main.lua — CLEANUP + все модули
+-- main.lua
 local CoreGui = game:GetService("CoreGui")
 
--- Удаляем ВСЕ старые окна TFS2CheatMenu
+-- Cleanup
 local removed = 0
 for _, gui in ipairs(CoreGui:GetChildren()) do
     if gui.Name == "TFS2CheatMenu" then
@@ -22,11 +22,12 @@ local UI = loadstring(game:HttpGet(baseUrl .. "ui.lua"))()
 local BigHead = loadstring(game:HttpGet(baseUrl .. "bighead.lua"))()
 local Aim = loadstring(game:HttpGet(baseUrl .. "aim.lua"))()
 local Highlight = loadstring(game:HttpGet(baseUrl .. "highlight.lua"))()
+local Extras = loadstring(game:HttpGet(baseUrl .. "extras.lua"))()
 
 local Zombies = Utils.getZombies()
 local UIObjects = UI.createWindow(Config, Utils)
 
--- Инициализация модулей (каждый в pcall, чтобы один не сломал другие)
+-- Инициализация модулей (в pcall)
 print("[Test] BigHead Init...")
 local ok1, err1 = pcall(function() BigHead.Init(Config, Utils, UI, UIObjects) end)
 print("[Test] BigHead:", ok1, err1)
@@ -39,11 +40,8 @@ print("[Test] Highlight Init...")
 local ok3, err3 = pcall(function() Highlight.Init(Config, Utils, UI, UIObjects) end)
 print("[Test] Highlight:", ok3, err3)
 
+print("[Test] Extras Init...")
+local ok4, err4 = pcall(function() Extras.Init(Config, Utils, UI, UIObjects) end)
+print("[Test] Extras:", ok4, err4)
+
 print("[TFS2 Cheat] Загружено. Старых окон удалено:", removed)
-task.wait(0.5)
-print("=== Порядок в ScrollFrame ===")
-for _, child in ipairs(UIObjects.ScrollFrame:GetChildren()) do
-    if child:IsA("GuiObject") then
-        print(child.ClassName .. " | " .. child.Name .. " | LayoutOrder: " .. tostring(child.LayoutOrder))
-    end
-end
