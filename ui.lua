@@ -3,7 +3,6 @@ local UI = {}
 
 local CoreGui = game:GetService("CoreGui")
 
--- Внутренний счётчик
 local layoutCounter = 0
 local function nextOrder()
     layoutCounter = layoutCounter + 1
@@ -15,7 +14,15 @@ function UI.createWindow(Config, Utils)
     ScreenGui.Name = "TFS2CheatMenu"
     ScreenGui.ResetOnSpawn = false
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    ScreenGui.Parent = CoreGui
+    
+    -- Защита: если CoreGui недоступен, используем PlayerGui
+    local success, err = pcall(function()
+        ScreenGui.Parent = CoreGui
+    end)
+    
+    if not success then
+        ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    end
     
     local MainFrame = Instance.new("Frame")
     MainFrame.Size = UDim2.new(0, 300, 0, 600)
