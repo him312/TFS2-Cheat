@@ -6,7 +6,6 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     
     UI.createHeader(UIObjects.ScrollFrame, Utils, "Big Head")
     
-    -- StatusLabel (работает)
     local StatusLabel = Instance.new("TextLabel")
     StatusLabel.Size = UDim2.new(1, -10, 0, 22)
     StatusLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
@@ -18,19 +17,22 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     StatusLabel.LayoutOrder = Utils.nextOrder()
     StatusLabel.Parent = UIObjects.ScrollFrame
     
-    -- Кнопка через _G (чтобы callback видел)
-    _G.TFS2_BigHeadToggle = UI.createButton(UIObjects.ScrollFrame, Utils, "ВКЛ / ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
+    -- Кнопка БЕЗ callback'а
+    local ToggleButton = UI.createButton(UIObjects.ScrollFrame, Utils, "ВКЛ / ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function() end)
+    
+    -- Отдельный обработчик
+    ToggleButton.MouseButton1Click:Connect(function()
         Config.SETTINGS.BIGHEAD_ENABLED = not Config.SETTINGS.BIGHEAD_ENABLED
         
         if Config.SETTINGS.BIGHEAD_ENABLED then
             StatusLabel.Text = "Статус: ВКЛ"
             StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-            _G.TFS2_BigHeadToggle.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
             BigHead.updateAll(Zombies, Config)
         else
             StatusLabel.Text = "Статус: ВЫКЛ"
             StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-            _G.TFS2_BigHeadToggle.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
             BigHead.resetAll(Zombies)
         end
     end)
@@ -106,29 +108,3 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     
     print("[BigHead] Загружен")
 end
-
-function BigHead.apply(zombie, Config)
-    local head = zombie:FindFirstChild("Head")
-    if not head then return end
-    head.Size = Vector3.new(Config.SETTINGS.HEAD_SCALE, Config.SETTINGS.HEAD_SCALE, Config.SETTINGS.HEAD_SCALE)
-    head.Transparency = Config.SETTINGS.TRANSPARENCY
-    head.CanCollide = false
-end
-
-function BigHead.updateAll(Zombies, Config)
-    for _, zombie in ipairs(Zombies:GetChildren()) do
-        BigHead.apply(zombie, Config)
-    end
-end
-
-function BigHead.resetAll(Zombies)
-    for _, zombie in ipairs(Zombies:GetChildren()) do
-        local head = zombie:FindFirstChild("Head")
-        if head then
-            head.Size = Vector3.new(1, 1, 1)
-            head.Transparency = 0
-        end
-    end
-end
-
-return BigHead
