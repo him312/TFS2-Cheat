@@ -17,6 +17,7 @@ function Aim.Init(Config, Utils, UI, UIObjects)
     
     UI.createHeader(UIObjects.ScrollFrame, Utils, "Aim Assist")
     
+    -- StatusLabel (отдельно от callback'а)
     local StatusLabel = Instance.new("TextLabel")
     StatusLabel.Size = UDim2.new(1, -10, 0, 22)
     StatusLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
@@ -28,18 +29,25 @@ function Aim.Init(Config, Utils, UI, UIObjects)
     StatusLabel.LayoutOrder = Utils.nextOrder()
     StatusLabel.Parent = UIObjects.ScrollFrame
     
-    local ToggleButton = UI.createButton(UIObjects.ScrollFrame, Utils, "ВЫКЛ", 25, Color3.fromRGB(0, 150, 80), function()
+    -- Кнопка БЕЗ ссылки на UI в callback'е
+    UI.createButton(UIObjects.ScrollFrame, Utils, "ВКЛ / ВЫКЛ (RightAlt)", 25, Color3.fromRGB(0, 150, 80), function()
         scriptEnabled = not scriptEnabled
-        if scriptEnabled then
-            StatusLabel.Text = "Статус: ВКЛ"
-            StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-            ToggleButton.Text = "ВЫКЛ"
-            ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
-        else
-            StatusLabel.Text = "Статус: ВЫКЛ"
-            StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-            ToggleButton.Text = "ВКЛ"
-            ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+        Config.SETTINGS.AIM_ENABLED = scriptEnabled
+        print("[Aim] Статус:", scriptEnabled and "ВКЛ" or "ВЫКЛ")
+    end)
+    
+    -- Обновление StatusLabel через цикл
+    task.spawn(function()
+        while task.wait(0.1) do
+            if StatusLabel and StatusLabel.Parent then
+                if scriptEnabled then
+                    StatusLabel.Text = "Статус: ВКЛ"
+                    StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
+                else
+                    StatusLabel.Text = "Статус: ВЫКЛ"
+                    StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
+                end
+            end
         end
     end)
     
@@ -48,17 +56,8 @@ function Aim.Init(Config, Utils, UI, UIObjects)
         
         if input.KeyCode == Config.SETTINGS.ACTIVATE_KEY then
             scriptEnabled = not scriptEnabled
-            if scriptEnabled then
-                StatusLabel.Text = "Статус: ВКЛ"
-                StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-                ToggleButton.Text = "ВЫКЛ"
-                ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
-            else
-                StatusLabel.Text = "Статус: ВЫКЛ"
-                StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-                ToggleButton.Text = "ВКЛ"
-                ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
-            end
+            Config.SETTINGS.AIM_ENABLED = scriptEnabled
+            print("[Aim] Статус:", scriptEnabled and "ВКЛ" or "ВЫКЛ")
         end
         
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
