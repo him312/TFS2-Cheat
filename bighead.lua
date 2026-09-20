@@ -6,15 +6,12 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     
     UI.createHeader(UIObjects.ScrollFrame, Utils, "Big Head")
     
-    local BigHeadToggle = UI.createButton(UIObjects.ScrollFrame, Utils, "Big Head: ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
+    -- Кнопка БЕЗ изменения текста
+    UI.createButton(UIObjects.ScrollFrame, Utils, "Big Head: ВКЛ/ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
         Config.SETTINGS.BIGHEAD_ENABLED = not Config.SETTINGS.BIGHEAD_ENABLED
         if Config.SETTINGS.BIGHEAD_ENABLED then
-            BigHeadToggle.Text = "Big Head: ВКЛ"
-            BigHeadToggle.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
             BigHead.updateAll(Zombies, Config)
         else
-            BigHeadToggle.Text = "Big Head: ВЫКЛ"
-            BigHeadToggle.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
             BigHead.resetAll(Zombies)
         end
     end)
@@ -80,70 +77,6 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
         Config.SETTINGS.HEAD_SCALE = math.min(15, Config.SETTINGS.HEAD_SCALE + 0.5)
         SizeValue.Text = tostring(Config.SETTINGS.HEAD_SCALE)
         SizeLabel.Text = "Размер головы: " .. Config.SETTINGS.HEAD_SCALE
-        if Config.SETTINGS.BIGHEAD_ENABLED then BigHead.updateAll(Zombies, Config) end
-    end)
-    
-    -- Прозрачность
-    local TransLabel = Instance.new("TextLabel")
-    TransLabel.Size = UDim2.new(1, -10, 0, 18)
-    TransLabel.BackgroundTransparency = 1
-    TransLabel.Text = "Прозрачность головы: 0.8"
-    TransLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-    TransLabel.TextSize = 11
-    TransLabel.Font = Enum.Font.Gotham
-    TransLabel.TextXAlignment = Enum.TextXAlignment.Left
-    TransLabel.LayoutOrder = Utils.nextOrder()
-    TransLabel.Parent = UIObjects.ScrollFrame
-    
-    local TransContainer = Instance.new("Frame")
-    TransContainer.Size = UDim2.new(1, -10, 0, 25)
-    TransContainer.BackgroundTransparency = 1
-    TransContainer.LayoutOrder = Utils.nextOrder()
-    TransContainer.Parent = UIObjects.ScrollFrame
-    
-    local TransMinus = Instance.new("TextButton")
-    TransMinus.Size = UDim2.new(0, 30, 1, 0)
-    TransMinus.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-    TransMinus.BorderSizePixel = 0
-    TransMinus.Text = "−"
-    TransMinus.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TransMinus.TextSize = 16
-    TransMinus.Font = Enum.Font.GothamBold
-    TransMinus.Parent = TransContainer
-    
-    local TransValue = Instance.new("TextLabel")
-    TransValue.Size = UDim2.new(0, 100, 1, 0)
-    TransValue.Position = UDim2.new(0, 35, 0, 0)
-    TransValue.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-    TransValue.BorderSizePixel = 0
-    TransValue.Text = "0.8"
-    TransValue.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TransValue.TextSize = 13
-    TransValue.Font = Enum.Font.GothamBold
-    TransValue.Parent = TransContainer
-    
-    local TransPlus = Instance.new("TextButton")
-    TransPlus.Size = UDim2.new(0, 30, 1, 0)
-    TransPlus.Position = UDim2.new(0, 140, 0, 0)
-    TransPlus.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-    TransPlus.BorderSizePixel = 0
-    TransPlus.Text = "+"
-    TransPlus.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TransPlus.TextSize = 16
-    TransPlus.Font = Enum.Font.GothamBold
-    TransPlus.Parent = TransContainer
-    
-    TransMinus.MouseButton1Click:Connect(function()
-        Config.SETTINGS.TRANSPARENCY = math.max(0, Config.SETTINGS.TRANSPARENCY - 0.1)
-        TransValue.Text = string.format("%.1f", Config.SETTINGS.TRANSPARENCY)
-        TransLabel.Text = "Прозрачность головы: " .. string.format("%.1f", Config.SETTINGS.TRANSPARENCY)
-        if Config.SETTINGS.BIGHEAD_ENABLED then BigHead.updateAll(Zombies, Config) end
-    end)
-    
-    TransPlus.MouseButton1Click:Connect(function()
-        Config.SETTINGS.TRANSPARENCY = math.min(1, Config.SETTINGS.TRANSPARENCY + 0.1)
-        TransValue.Text = string.format("%.1f", Config.SETTINGS.TRANSPARENCY)
-        TransLabel.Text = "Прозрачность головы: " .. string.format("%.1f", Config.SETTINGS.TRANSPARENCY)
         if Config.SETTINGS.BIGHEAD_ENABLED then BigHead.updateAll(Zombies, Config) end
     end)
     
