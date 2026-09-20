@@ -2,27 +2,20 @@
 local UI = {}
 
 local CoreGui = game:GetService("CoreGui")
+local Utils = nil
 
-local layoutCounter = 0
-local function nextOrder()
-    layoutCounter = layoutCounter + 1
-    return layoutCounter
+function UI.setUtils(u)
+    Utils = u
 end
 
-function UI.createWindow(Config, Utils)
+function UI.createWindow(Config, UtilsArg)
+    Utils = UtilsArg
+    
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Name = "TFS2CheatMenu"
     ScreenGui.ResetOnSpawn = false
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    
-    -- Защита: если CoreGui недоступен, используем PlayerGui
-    local success, err = pcall(function()
-        ScreenGui.Parent = CoreGui
-    end)
-    
-    if not success then
-        ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-    end
+    ScreenGui.Parent = CoreGui
     
     local MainFrame = Instance.new("Frame")
     MainFrame.Size = UDim2.new(0, 300, 0, 600)
@@ -106,7 +99,8 @@ function UI.createWindow(Config, Utils)
     }
 end
 
-function UI.createHeader(ScrollFrame, Utils, text)
+function UI.createHeader(ScrollFrame, UtilsArg, text)
+    Utils = UtilsArg
     local label = Instance.new("TextLabel")
     label.Size = UDim2.new(1, -10, 0, 18)
     label.BackgroundTransparency = 1
@@ -114,12 +108,13 @@ function UI.createHeader(ScrollFrame, Utils, text)
     label.TextColor3 = Color3.fromRGB(150, 150, 200)
     label.TextSize = 11
     label.Font = Enum.Font.GothamBold
-    label.LayoutOrder = nextOrder()
+    label.LayoutOrder = Utils.nextOrder()
     label.Parent = ScrollFrame
     return label
 end
 
-function UI.createButton(ScrollFrame, Utils, text, height, color, callback)
+function UI.createButton(ScrollFrame, UtilsArg, text, height, color, callback)
+    Utils = UtilsArg
     local button = Instance.new("TextButton")
     button.Size = UDim2.new(1, -10, 0, height or 25)
     button.BackgroundColor3 = color or Color3.fromRGB(50, 50, 60)
@@ -128,7 +123,7 @@ function UI.createButton(ScrollFrame, Utils, text, height, color, callback)
     button.TextColor3 = Color3.fromRGB(255, 255, 255)
     button.TextSize = 12
     button.Font = Enum.Font.Gotham
-    button.LayoutOrder = nextOrder()
+    button.LayoutOrder = Utils.nextOrder()
     button.Parent = ScrollFrame
     button.MouseButton1Click:Connect(callback)
     return button
