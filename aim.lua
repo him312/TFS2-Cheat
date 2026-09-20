@@ -30,7 +30,7 @@ function Aim.Init(Config, Utils, UI, UIObjects)
     StatusLabel.Parent = UIObjects.ScrollFrame
     
     -- Кнопка БЕЗ ссылки на UI в callback'е
-    UI.createButton(UIObjects.ScrollFrame, Utils, "ВКЛ / ВЫКЛ (RightAlt)", 25, Color3.fromRGB(0, 150, 80), function()
+    UI.createButton(UIObjects.ScrollFrame, Utils, "ВКЛ / ВЫКЛ (" .. Config.SETTINGS.ACTIVATE_KEY.Name .. ")", 25, Color3.fromRGB(0, 150, 80), function()
         scriptEnabled = not scriptEnabled
         Config.SETTINGS.AIM_ENABLED = scriptEnabled
         print("[Aim] Статус:", scriptEnabled and "ВКЛ" or "ВЫКЛ")
