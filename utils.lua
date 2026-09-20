@@ -1,14 +1,13 @@
 -- utils.lua
 local Utils = {}
 
--- Счётчик LayoutOrder
+-- Глобальный счётчик (используется и в ui.lua, и в модулях)
 local layoutCounter = 0
 function Utils.nextOrder()
     layoutCounter = layoutCounter + 1
     return layoutCounter
 end
 
--- Определение типа зомби
 function Utils.getZombieType(zombie, ALL_ZOMBIE_TYPES)
     local name = zombie.Name
     name = name:gsub("Zombie$", ""):gsub("Zombie", "")
@@ -16,7 +15,6 @@ function Utils.getZombieType(zombie, ALL_ZOMBIE_TYPES)
     
     if name == "" then return "Common" end
     
-    -- Специальные случаи
     if name:lower() == "heavyarmour" or name:lower() == "heavyarmor" then return "Heavy Armour" end
     if name:lower() == "armoured" or name:lower() == "armored" then return "Armour" end
     if name:lower() == "drenchwraith" then return "Drench Wraith" end
@@ -24,13 +22,11 @@ function Utils.getZombieType(zombie, ALL_ZOMBIE_TYPES)
     if name:lower() == "swampgiant" then return "Swamp Giant" end
     if name:lower() == "longarm" then return "Long Arm" end
     
-    -- Точное совпадение
     for _, zType in pairs(ALL_ZOMBIE_TYPES) do
         if name:lower() == zType:lower() then return zType end
         if name:lower():gsub("%s", "") == zType:lower():gsub("%s", "") then return zType end
     end
     
-    -- Частичное
     for _, zType in pairs(ALL_ZOMBIE_TYPES) do
         if name:lower():find(zType:lower():gsub("%s", "")) then return zType end
     end
@@ -38,7 +34,6 @@ function Utils.getZombieType(zombie, ALL_ZOMBIE_TYPES)
     return name
 end
 
--- Получение Zombies с ожиданием
 function Utils.getZombies()
     local Zombies = workspace:FindFirstChild("Zombies")
     if not Zombies then
