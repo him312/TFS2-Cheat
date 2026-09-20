@@ -6,7 +6,7 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     
     UI.createHeader(UIObjects.ScrollFrame, Utils, "Big Head")
     
-    -- StatusLabel для отображения статуса
+    -- StatusLabel (работает)
     local StatusLabel = Instance.new("TextLabel")
     StatusLabel.Size = UDim2.new(1, -10, 0, 22)
     StatusLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
@@ -18,19 +18,19 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     StatusLabel.LayoutOrder = Utils.nextOrder()
     StatusLabel.Parent = UIObjects.ScrollFrame
     
-    -- Кнопка вкл/выкл (меняет только StatusLabel)
-    local ToggleButton = UI.createButton(UIObjects.ScrollFrame, Utils, "ВКЛ / ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
+    -- Кнопка через _G (чтобы callback видел)
+    _G.TFS2_BigHeadToggle = UI.createButton(UIObjects.ScrollFrame, Utils, "ВКЛ / ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
         Config.SETTINGS.BIGHEAD_ENABLED = not Config.SETTINGS.BIGHEAD_ENABLED
         
         if Config.SETTINGS.BIGHEAD_ENABLED then
             StatusLabel.Text = "Статус: ВКЛ"
             StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 100)
-            ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
+            _G.TFS2_BigHeadToggle.BackgroundColor3 = Color3.fromRGB(0, 150, 80)
             BigHead.updateAll(Zombies, Config)
         else
             StatusLabel.Text = "Статус: ВЫКЛ"
             StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
-            ToggleButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+            _G.TFS2_BigHeadToggle.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
             BigHead.resetAll(Zombies)
         end
     end)
