@@ -1,4 +1,4 @@
--- main.lua — ТЕСТ + BigHead
+-- main.lua — ТЕСТ + BigHead с pcall
 local baseUrl = "https://raw.githubusercontent.com/him312/TFS2-Cheat/main/"
 
 local Config = loadstring(game:HttpGet(baseUrl .. "config.lua"))()
@@ -10,10 +10,11 @@ local Zombies = Utils.getZombies()
 local UIObjects = UI.createWindow(Config, Utils)
 
 print("[Test] BigHead Init...")
-BigHead.Init(Config, Utils, UI, UIObjects)
-print("[Test] BigHead готов.")
+local success, err = pcall(function()
+    BigHead.Init(Config, Utils, UI, UIObjects)
+end)
+print("[Test] BigHead:", success, err)
 
--- Проверяем, что в ScrollFrame
 task.wait(0.5)
 local children = UIObjects.ScrollFrame:GetChildren()
 print("[Test] Элементов в ScrollFrame:", #children)
