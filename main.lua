@@ -4,42 +4,21 @@ local baseUrl = "https://raw.githubusercontent.com/him312/TFS2-Cheat/main/"
 print("[TFS2 Cheat] Загрузка модулей...")
 
 local Config = loadstring(game:HttpGet(baseUrl .. "config.lua"))()
-print("[Main] Config:", Config)
-
 local Utils = loadstring(game:HttpGet(baseUrl .. "utils.lua"))()
-print("[Main] Utils:", Utils)
-
 local UI = loadstring(game:HttpGet(baseUrl .. "ui.lua"))()
-print("[Main] UI:", UI)
-
-local Aim = loadstring(game:HttpGet(baseUrl .. "aim.lua"))()
-print("[Main] Aim:", Aim)
-
 local BigHead = loadstring(game:HttpGet(baseUrl .. "bighead.lua"))()
-print("[Main] BigHead:", BigHead)
-
 local Highlight = loadstring(game:HttpGet(baseUrl .. "highlight.lua"))()
-print("[Main] Highlight:", Highlight)
 
--- Ждём Zombies
 local Zombies = Utils.getZombies()
 if not Zombies then
     warn("[TFS2 Cheat] Zombies не найден")
     return
 end
 
--- Создаём UI
 local UIObjects = UI.createWindow(Config, Utils)
 
-print("UIObjects:", UIObjects)
-print("ScrollFrame:", UIObjects and UIObjects.ScrollFrame)
-
--- Инициализация модулей
-Aim.Init(Config, Utils, UI, UIObjects)
+-- Только BigHead и Highlight — без Aim
 BigHead.Init(Config, Utils, UI, UIObjects)
 Highlight.Init(Config, Utils, UI, UIObjects)
 
-print("[TFS2 Cheat] Все модули загружены!")
-print("  RightAlt — вкл/выкл Aim Assist")
-print("  Big Head — секция в меню")
-print("  Highlight — секция в меню")
+print("[TFS2 Cheat] Модули загружены (Aim отключён)")
