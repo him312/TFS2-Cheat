@@ -6,7 +6,6 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     
     UI.createHeader(UIObjects.ScrollFrame, Utils, "Big Head")
     
-    -- 1. StatusLabel
     local StatusLabel = Instance.new("TextLabel")
     StatusLabel.Size = UDim2.new(1, -10, 0, 22)
     StatusLabel.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
@@ -18,7 +17,6 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     StatusLabel.LayoutOrder = Utils.nextOrder()
     StatusLabel.Parent = UIObjects.ScrollFrame
     
-    -- 2. Кнопка вкл/выкл
     UI.createButton(UIObjects.ScrollFrame, Utils, "Big Head: ВКЛ/ВЫКЛ", 25, Color3.fromRGB(180, 50, 50), function()
         Config.SETTINGS.BIGHEAD_ENABLED = not Config.SETTINGS.BIGHEAD_ENABLED
         if Config.SETTINGS.BIGHEAD_ENABLED then
@@ -26,10 +24,9 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
         else
             BigHead.resetAll(Zombies)
         end
-        print("[BigHead] Статус:", Config.SETTINGS.BIGHEAD_ENABLED and "ВКЛ" or "ВЫКЛ")
     end)
     
-    -- 3. Размер (TextBox)
+    -- Размер (TextBox)
     local SizeLabel = Instance.new("TextLabel")
     SizeLabel.Size = UDim2.new(1, -10, 0, 18)
     SizeLabel.BackgroundTransparency = 1
@@ -41,26 +38,21 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     SizeLabel.LayoutOrder = Utils.nextOrder()
     SizeLabel.Parent = UIObjects.ScrollFrame
     
-    local SizeContainer = Instance.new("Frame")
-    SizeContainer.Size = UDim2.new(1, -10, 0, 25)
-    SizeContainer.BackgroundTransparency = 1
-    SizeContainer.LayoutOrder = Utils.nextOrder()
-    SizeContainer.Parent = UIObjects.ScrollFrame
-    
     local SizeTextBox = Instance.new("TextBox")
-    SizeTextBox.Size = UDim2.new(1, 0, 1, 0)
+    SizeTextBox.Size = UDim2.new(1, -10, 0, 25)
     SizeTextBox.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
     SizeTextBox.BorderSizePixel = 0
     SizeTextBox.Text = tostring(Config.SETTINGS.HEAD_SCALE)
     SizeTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     SizeTextBox.TextSize = 13
     SizeTextBox.Font = Enum.Font.GothamBold
-    SizeTextBox.PlaceholderText = "Введи число (1-15)"
+    SizeTextBox.PlaceholderText = "Введи число"
     SizeTextBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
     SizeTextBox.ClearTextOnFocus = false
-    SizeTextBox.Parent = SizeContainer
+    SizeTextBox.LayoutOrder = Utils.nextOrder()
+    SizeTextBox.Parent = UIObjects.ScrollFrame
     
-    -- 4. Прозрачность (TextBox)
+    -- Прозрачность (TextBox)
     local TransLabel = Instance.new("TextLabel")
     TransLabel.Size = UDim2.new(1, -10, 0, 18)
     TransLabel.BackgroundTransparency = 1
@@ -72,56 +64,45 @@ function BigHead.Init(Config, Utils, UI, UIObjects)
     TransLabel.LayoutOrder = Utils.nextOrder()
     TransLabel.Parent = UIObjects.ScrollFrame
     
-    local TransContainer = Instance.new("Frame")
-    TransContainer.Size = UDim2.new(1, -10, 0, 25)
-    TransContainer.BackgroundTransparency = 1
-    TransContainer.LayoutOrder = Utils.nextOrder()
-    TransContainer.Parent = UIObjects.ScrollFrame
-    
     local TransTextBox = Instance.new("TextBox")
-    TransTextBox.Size = UDim2.new(1, 0, 1, 0)
+    TransTextBox.Size = UDim2.new(1, -10, 0, 25)
     TransTextBox.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
     TransTextBox.BorderSizePixel = 0
     TransTextBox.Text = string.format("%.1f", Config.SETTINGS.TRANSPARENCY)
     TransTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     TransTextBox.TextSize = 13
     TransTextBox.Font = Enum.Font.GothamBold
-    TransTextBox.PlaceholderText = "Введи число (0.0-1.0)"
+    TransTextBox.PlaceholderText = "Введи число"
     TransTextBox.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
     TransTextBox.ClearTextOnFocus = false
-    TransTextBox.Parent = TransContainer
+    TransTextBox.LayoutOrder = Utils.nextOrder()
+    TransTextBox.Parent = UIObjects.ScrollFrame
     
-    -- === ОБРАБОТЧИКИ ВВОДА ===
-    
-    -- Размер
-    SizeTextBox.FocusLost:Connect(function(enterPressed)
-        local value = tonumber(SizeTextBox.Text)
-        if value then
-            value = math.clamp(value, 1, 15)
-            Config.SETTINGS.HEAD_SCALE = value
-            SizeTextBox.Text = tostring(value)
+    -- Обработчики
+    SizeTextBox.FocusLost:Connect(function()
+        local v = tonumber(SizeTextBox.Text)
+        if v then
+            v = math.clamp(v, 1, 15)
+            Config.SETTINGS.HEAD_SCALE = v
+            SizeTextBox.Text = tostring(v)
             if Config.SETTINGS.BIGHEAD_ENABLED then BigHead.updateAll(Zombies, Config) end
-            print("[BigHead] Размер:", value)
         else
             SizeTextBox.Text = tostring(Config.SETTINGS.HEAD_SCALE)
         end
     end)
     
-    -- Прозрачность
-    TransTextBox.FocusLost:Connect(function(enterPressed)
-        local value = tonumber(TransTextBox.Text)
-        if value then
-            value = math.clamp(value, 0, 1)
-            Config.SETTINGS.TRANSPARENCY = value
-            TransTextBox.Text = string.format("%.1f", value)
+    TransTextBox.FocusLost:Connect(function()
+        local v = tonumber(TransTextBox.Text)
+        if v then
+            v = math.clamp(v, 0, 1)
+            Config.SETTINGS.TRANSPARENCY = v
+            TransTextBox.Text = string.format("%.1f", v)
             if Config.SETTINGS.BIGHEAD_ENABLED then BigHead.updateAll(Zombies, Config) end
-            print("[BigHead] Прозрачность:", value)
         else
             TransTextBox.Text = string.format("%.1f", Config.SETTINGS.TRANSPARENCY)
         end
     end)
     
-    -- Обновление UI через цикл
     task.spawn(function()
         while task.wait(0.1) do
             if StatusLabel and StatusLabel.Parent then
