@@ -11,4 +11,12 @@ local UIObjects = UI.createWindow(Config, Utils)
 
 print("[Test] BigHead Init...")
 BigHead.Init(Config, Utils, UI, UIObjects)
-print("[Test] BigHead готов. Ошибок нет.")
+print("[Test] BigHead готов.")
+
+-- Проверяем, что в ScrollFrame
+task.wait(0.5)
+local children = UIObjects.ScrollFrame:GetChildren()
+print("[Test] Элементов в ScrollFrame:", #children)
+for i, child in ipairs(children) do
+    print("  " .. i .. ". " .. child.ClassName .. " | " .. child.Name)
+end
